@@ -1,0 +1,6 @@
+@TL.ResilientCore.Api_HostAddress = http://localhost:5086
+
+GET {{TL.ResilientCore.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
