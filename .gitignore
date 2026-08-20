@@ -1,0 +1,65 @@
+## ---------------------------------------------------------------------------
+## Arquivos de Configuração Local e Segredos
+## ---------------------------------------------------------------------------
+.env
+.env.*
+!.env.example
+appsettings.Local.json
+appsettings.Development.json
+docker-compose.override.yml
+
+## ---------------------------------------------------------------------------
+## Binários .NET e Pastas de Build
+## ---------------------------------------------------------------------------
+[Bb]in/
+[Oo]bj/
+[Oo]ut/
+[Tt]est[Rr]esult*/
+[Bb]uild/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+## ---------------------------------------------------------------------------
+## Visual Studio / VS Code / IDEs
+## ---------------------------------------------------------------------------
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+.vs/
+*.ide/
+.idea/
+*.swp
+*.swo
+
+## ---------------------------------------------------------------------------
+## Arquivos de Log e Cache
+## ---------------------------------------------------------------------------
+*.log
+*.cache
+*.err
+crash_info.txt
+
+## ---------------------------------------------------------------------------
+## Pastas de Dados Locais (Bancos, Cache, etc)
+## ---------------------------------------------------------------------------
+/data/
+/db-data/
+/pg-data/
+/redis-data/
+
+## ---------------------------------------------------------------------------
+## SO e Sistema de Arquivos
+## ---------------------------------------------------------------------------
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
