@@ -36,16 +36,22 @@ O **TL.ResilientCore** é construído sobre 4 pilares fundamentais para microsse
 
 * **CQRS + EF Core:** Segregação rigorosa de Comandos (Escrita) e Consultas (Leitura).
 
+## 🔐 Ecossistema de Identidade (Autenticação)
+
+Este Starter Kit está pré-configurado para validar autenticação e autorização via JWT utilizando o Keycloak. Para subir a infraestrutura de segurança localmente, utilize o nosso repositório complementar:
+
+👉 [TL.IdentityHub - Acesse o Repositório Oficial](https://github.com/thaylonmayk/TL.IdentityHub)
+
 ## 🚀 Como utilizar (Localmente)
 
 *Este template foi desenhado para ser empacotado via CLI do .NET.*
 
 Primeira vez gerando um projeto com este template? Leia o nosso [Guia de Início Rápido (Getting Started)](docs/getting_started.md)para entender como estruturar suas features, regras de domínio e fluxo de trabalho.
 
-**1. Instale o template na sua máquina:**
+**1. Instale o template via NuGet:**
 
 ```bash
-dotnet new install ./TL.ResilientCore.Template
+dotnet new install TL.ResilientCore.Template
 ```
 
 **2. Crie um novo microsserviço:**
