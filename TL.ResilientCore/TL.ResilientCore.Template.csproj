@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <PackageType>Template</PackageType>
+    <PackageVersion>1.0.0</PackageVersion>
+    <PackageId>TL.ResilientCore.Template</PackageId>
+    <Title>TL.ResilientCore Starter Kit</Title>
+    <Authors>Thaylon Lopes</Authors>
+    <Description>Template .NET corporativo com Clean Architecture, DDD, CQRS, Result Pattern e Outbox Pattern.</Description>
+    <PackageTags>dotnet-new;templates;clean-architecture;cqrs;outbox</PackageTags>
+    <TargetFramework>net9.0</TargetFramework>
+
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    
+    <IncludeContentInPack>true</IncludeContentInPack>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <ContentTargetFolders>content</ContentTargetFolders>
+    <NoWarn>$(NoWarn);NU5128</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="**\*" Exclude="**\bin\**;**\obj\**;**\.git\**;**\.vs\**;**\*.user;TL.ResilientCore.Template.csproj" />
+    <Compile Remove="**\*" />
+
+    <None Include="..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+</Project>
