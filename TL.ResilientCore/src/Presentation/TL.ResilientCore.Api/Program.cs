@@ -54,3 +54,5 @@ app.MapGet("/secure-data", (System.Security.Claims.ClaimsPrincipal user) =>
 }).RequireAuthorization();   
 
 app.Run();
+
+public partial class Program { }

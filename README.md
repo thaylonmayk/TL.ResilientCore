@@ -36,6 +36,29 @@ O **TL.ResilientCore** é construído sobre 4 pilares fundamentais para microsse
 
 * **CQRS + EF Core:** Segregação rigorosa de Comandos (Escrita) e Consultas (Leitura).
 
+## 🔺 Pirâmide de Testes Automatizados
+
+O template inclui três projetos de testes cobrindo todas as camadas:
+
+### 1. ⚡ Testes de Arquitetura (`TL.ResilientCore.ArchitectureTests`)
+Executados via **NetArchTest.Rules**:
+* **`Layers/CleanArchitectureTests.cs`**: Garante isolamento estrito — `Domain` não depende de `Application` nem `Infrastructure`.
+* **`NamingConventions/CqrsNamingTests.cs`**: Valida convenções de nomenclatura CQRS (`Handlers` implementando `IRequestHandler`).
+* **`Design/DomainDesignTests.cs`**: Garante imutabilidade de `Domain Events` (`sealed`/`record`) e encapsulamento de construtores em `Entities`.
+
+### 2. ⚡ Testes Unitários (`TL.ResilientCore.UnitTests`)
+Executados via **xUnit** e **FluentAssertions**:
+* **`Domain/ResultTests.cs`**: Valida comportamento das estruturas `Result` e `Error`.
+* **`Domain/AggregateRootTests.cs`**: Valida o motor de captura e limpeza de `Domain Events` nos agregados.
+
+### 3. ⚡ Testes de Integração (`TL.ResilientCore.IntegrationTests`)
+Executados via **Testcontainers (PostgreSQL 16)** e **WebApplicationFactory**:
+* **`Setup/IntegrationTestWebAppFactory.cs`**: Inicializa um container PostgreSQL efêmero e aplica automaticamente as migrações do EF Core via `MigrateAsync()`.
+* **`Features/Database/DatabaseMigrationTests.cs`**: Valida se a base sobe zerada sem migrações pendentes.
+* **`Features/Outbox/OutboxIntegrationTests.cs`**: Valida o schema e consultas da tabela `OutboxMessages`.
+* **`Features/Health/ApiHealthTests.cs`**: Valida o ciclo de vida e disponibilidade HTTP do pipeline.
+
+
 ## 🔐 Ecossistema de Identidade (Autenticação)
 
 Este Starter Kit está pré-configurado para validar autenticação e autorização via JWT utilizando o Keycloak. Para subir a infraestrutura de segurança localmente, utilize o nosso repositório complementar:
