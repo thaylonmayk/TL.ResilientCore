@@ -18,11 +18,12 @@
           "exclude": [
             "**/bin/**",
             "**/obj/**",
-            "**/.vs/**",
-            "**/.vscode/**",
+            "**/.*/**",
             "**/*.user",
             "**/*.lock.json",
-            ".git/**",
+            "**/artifacts/**",
+            "**/nupkg/**",
+            "**/*.nupkg",
             ".template.config/**"
           ]
         }

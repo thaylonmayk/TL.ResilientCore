@@ -12,7 +12,17 @@ public sealed class OutboxMessageConfiguration : IEntityTypeConfiguration<Outbox
 
         builder.HasKey(x => x.Id);
 
+        builder.Property(x => x.Type)
+            .IsRequired()
+            .HasMaxLength(500);
+
+        builder.Property(x => x.Content)
+            .IsRequired();
+
+        builder.Property(x => x.RetryCount)
+            .HasDefaultValue(0);
+
         builder.HasIndex(x => x.OccurredOnUtc)
-               .HasFilter("\"ProcessedOnUtc\" IS NULL");
+               .HasFilter("\"ProcessedOnUtc\" IS NULL AND \"RetryCount\" < 5");
     }
 }

@@ -10,8 +10,7 @@ namespace TL.ResilientCore.IntegrationTests.Setup;
 
 public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
-    private readonly PostgreSqlContainer _dbContainer = new PostgreSqlBuilder()
-        .WithImage("postgres:16-alpine")
+    private readonly PostgreSqlContainer _dbContainer = new PostgreSqlBuilder("postgres:16-alpine")
         .WithDatabase("resilient_test_db")
         .WithUsername("postgres")
         .WithPassword("postgres")

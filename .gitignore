@@ -53,7 +53,7 @@ crash_info.txt
 /redis-data/
 
 ## ---------------------------------------------------------------------------
-## SO e Sistema de Arquivos
+## SO, Pacotes e Artefatos Locais
 ## ---------------------------------------------------------------------------
 .DS_Store
 .DS_Store?
@@ -63,3 +63,7 @@ crash_info.txt
 ehthumbs.db
 Thumbs.db
 Desktop.ini
+*.nupkg
+nupkg/
+artifacts/
+scratch/
