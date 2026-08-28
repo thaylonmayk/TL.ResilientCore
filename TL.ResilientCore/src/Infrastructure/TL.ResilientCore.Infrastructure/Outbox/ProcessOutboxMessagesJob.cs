@@ -10,8 +10,13 @@ using TL.ResilientCore.Infrastructure.Persistence;
 
 namespace TL.ResilientCore.Infrastructure.Outbox;
 
+/// <summary>
+/// BackgroundService encarregado de ler mensagens pendentes na Outbox e publicá-las no barramento assíncrono.
+/// </summary>
 public class ProcessOutboxMessagesJob : BackgroundService
 {
+    private const int MaxRetries = 5;
+    private const int BatchSize = 20;
     private readonly IServiceProvider _serviceProvider;
     private readonly ILogger<ProcessOutboxMessagesJob> _logger;
 
@@ -46,7 +51,6 @@ public class ProcessOutboxMessagesJob : BackgroundService
                     break;
                 }
             }
-
         }
     }
 
@@ -58,9 +62,9 @@ public class ProcessOutboxMessagesJob : BackgroundService
         var publisher = scope.ServiceProvider.GetRequiredService<IPublisher>();
 
         var messages = await dbContext.OutboxMessages
-            .Where(m => m.ProcessedOnUtc == null)
+            .Where(m => m.ProcessedOnUtc == null && m.RetryCount < MaxRetries)
             .OrderBy(m => m.OccurredOnUtc)
-            .Take(20)
+            .Take(BatchSize)
             .ToListAsync(stoppingToken);
 
         if (!messages.Any()) return;
@@ -69,17 +73,27 @@ public class ProcessOutboxMessagesJob : BackgroundService
         {
             try
             {
+                message.RetryCount++;
+
                 var domainEventType = Type.GetType(message.Type);
                 
                 if (domainEventType is null)
                 {
-                    _logger.LogWarning("Tipo do evento não encontrado: {Type}", message.Type);
+                    _logger.LogWarning("Tipo do evento não encontrado: {Type} para mensagem {Id} (Tentativa {RetryCount}/{MaxRetries})", 
+                        message.Type, message.Id, message.RetryCount, MaxRetries);
+                    message.Error = $"Tipo do evento não encontrado: {message.Type}";
                     continue;
                 }
 
                 var domainEvent = JsonSerializer.Deserialize(message.Content, domainEventType) as IDomainEvent;
 
-                if (domainEvent is null) continue;
+                if (domainEvent is null)
+                {
+                    _logger.LogWarning("Falha ao deserializar evento do tipo: {Type} para mensagem {Id} (Tentativa {RetryCount}/{MaxRetries})", 
+                        message.Type, message.Id, message.RetryCount, MaxRetries);
+                    message.Error = "Falha ao deserializar conteúdo JSON para IDomainEvent.";
+                    continue;
+                }
 
                 var notificationType = typeof(DomainEventNotification<>)
                     .MakeGenericType(domainEventType);
@@ -89,10 +103,12 @@ public class ProcessOutboxMessagesJob : BackgroundService
                 await publisher.Publish(notification!, stoppingToken);
 
                 message.ProcessedOnUtc = DateTime.UtcNow;
+                message.Error = null;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Erro ao processar mensagem outbox {Id}", message.Id);
+                _logger.LogError(ex, "Erro ao processar mensagem outbox {Id} (Tentativa {RetryCount}/{MaxRetries})", 
+                    message.Id, message.RetryCount, MaxRetries);
                 message.Error = ex.Message;
             }
         }

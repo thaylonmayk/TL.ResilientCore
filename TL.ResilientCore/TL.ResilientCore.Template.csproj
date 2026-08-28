@@ -1,12 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <PackageType>Template</PackageType>
-    <PackageVersion>1.1.0</PackageVersion>
+    <PackageVersion>1.2.1</PackageVersion>
     <PackageId>TL.ResilientCore.Template</PackageId>
     <Title>TL.ResilientCore Starter Kit</Title>
     <Authors>Thaylon Lopes</Authors>
-    <Description>Template .NET corporativo com Clean Architecture, DDD, CQRS, Result Pattern , Outbox Pattern e Automated Testing Suite.</Description>
-    <PackageTags>dotnet-new;templates;clean-architecture;cqrs;outbox;ddd;testcontainers;mediatr</PackageTags>
+    <Description>Template .NET corporativo com Clean Architecture, DDD, CQRS, Result Pattern, Outbox Pattern com Dead Letter Queue e Automated Testing Suite.</Description>
+    <PackageTags>dotnet-new;templates;clean-architecture;cqrs;outbox;ddd;testcontainers;mediatr;dead-letter-queue</PackageTags>
     <TargetFramework>net9.0</TargetFramework>
 
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -18,8 +18,9 @@
     <NoWarn>$(NoWarn);NU5128</NoWarn>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Content Include="**\*" Exclude="**\bin\**;**\obj\**;**\.git\**;**\.vs\**;**\*.user;TL.ResilientCore.Template.csproj" />
+  <ItemGroup>    
+    <Content Include="src\**\*;tests\**\*;docs\**\*;*.sln;docker-compose*.yml" 
+             Exclude="**\bin\**;**\obj\**;**\*.user;**\artifacts\**;**\nupkg\**" />
     <Compile Remove="**\*" />
 
     <None Include="..\README.md" Pack="true" PackagePath="\" />

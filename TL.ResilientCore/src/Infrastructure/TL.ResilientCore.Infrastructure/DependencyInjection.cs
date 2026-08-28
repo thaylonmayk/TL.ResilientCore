@@ -2,9 +2,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using TL.ResilientCore.Application.Abstractions.Data;
+using TL.ResilientCore.Application.Interfaces;
 using TL.ResilientCore.Infrastructure.Outbox;
 using TL.ResilientCore.Infrastructure.Persistence;
 using TL.ResilientCore.Infrastructure.Persistence.Interceptors;
+using TL.ResilientCore.Infrastructure.Services;
 
 namespace TL.ResilientCore.Infrastructure;
 
@@ -26,8 +28,12 @@ public static class DependencyInjection
         });
 
         services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<ApplicationDbContext>());
+        services.AddScoped<IApplicationDbContext>(sp => sp.GetRequiredService<ApplicationDbContext>());
 
         services.AddHostedService<ProcessOutboxMessagesJob>();
+        
+        services.AddHttpContextAccessor();
+        services.AddScoped<ICurrentUserService, CurrentUserService>();
 
         return services;
     }

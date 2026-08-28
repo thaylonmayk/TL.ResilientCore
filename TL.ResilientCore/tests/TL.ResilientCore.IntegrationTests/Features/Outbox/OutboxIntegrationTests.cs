@@ -16,7 +16,7 @@ public class OutboxIntegrationTests : IClassFixture<IntegrationTestWebAppFactory
     }
 
     [Fact]
-    public async Task OutboxMessages_DeveEstarPresenteNoModel_E_PermitirConsulta()
+    public async Task OutboxMessages_DeveEstarPresenteNoModel_E_ConterPropriedadesDeResiliencia()
     {
         using var scope = _factory.Services.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
@@ -24,5 +24,14 @@ public class OutboxIntegrationTests : IClassFixture<IntegrationTestWebAppFactory
         var outboxType = dbContext.Model.FindEntityType("TL.ResilientCore.Infrastructure.Outbox.OutboxMessage");
         
         Assert.NotNull(outboxType);
+        
+        var retryCountProperty = outboxType.FindProperty("RetryCount");
+        Assert.NotNull(retryCountProperty);
+
+        var errorProperty = outboxType.FindProperty("Error");
+        Assert.NotNull(errorProperty);
+
+        var count = await dbContext.OutboxMessages.CountAsync();
+        Assert.True(count >= 0);
     }
 }
